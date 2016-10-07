@@ -4,7 +4,7 @@ public abstract class TextureMapDisplay : MonoBehaviour
 {
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
-    protected Texture2D textureMap;
+    public Texture2D textureMap;
     public bool autoUpdate;
 
     public void Start()

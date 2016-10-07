@@ -26,6 +26,7 @@ public class MeshData
     public Mesh CreateMesh()
     {
         Mesh mesh = new Mesh();
+        Debug.Log(vertices.Length);
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;

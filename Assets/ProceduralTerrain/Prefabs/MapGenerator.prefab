@@ -120,50 +120,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawMode: 2
-  levelOfDetail: 1
   noiseScale: 25
   octaves: 12
   persistance: 0.5
   lacunarity: 4
   seed: 2
   offset: {x: 1, y: 2}
-  meshHeightMultiplier: 100
-  meshHeightCurve:
-    serializedVersion: 2
-    m_Curve:
-    - time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 0.10159588
-      value: -0.0041814893
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - time: 0.20204577
-      value: 0.0005905181
-      inSlope: -0.015525147
-      outSlope: -0.015525147
-      tangentMode: 0
-    - time: 0.2551526
-      value: 0.013188326
-      inSlope: 0.026784547
-      outSlope: 0.026784547
-      tangentMode: 0
-    - time: 0.8053366
-      value: 0.25127447
-      inSlope: 1.5625358
-      outSlope: 1.5625358
-      tangentMode: 1
-    - time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
   autoUpdate: 1
   regions:
   - name: Beach

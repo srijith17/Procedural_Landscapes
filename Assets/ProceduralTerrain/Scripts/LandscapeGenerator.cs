@@ -15,9 +15,15 @@ public class LandscapeGenerator : Singleton<LandscapeGenerator>
     [SerializeField]
     private RegionMapOptions regionMapOptions = new RegionMapOptions();
 
+    [SerializeField]
+    private MeshGeneratorOptions meshGeneratorOptions = new MeshGeneratorOptions();
+
+
     public float[,] noiseMap;
     public float[,] heightMap;
     public RegionMapGenerator.RegionType[,] regionMap;
+    public MeshData terrainMesh;
+
     public bool autoUpdate;
 
     public int mapRows = 256;
@@ -48,6 +54,8 @@ public class LandscapeGenerator : Singleton<LandscapeGenerator>
             regionMap = new RegionMapGenerator.RegionType[mapRows, mapColumns];
         }
         RegionMapGenerator.Generate(ref regionMap, heightMap, regionMapOptions);
+
+        MeshGenerator.GenerateTerrainMesh(ref terrainMesh, heightMap, meshGeneratorOptions);
 
     }
 

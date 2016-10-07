@@ -5,7 +5,7 @@ public static class MeshGenerator
 {
 
     //todo: add unit test
-    public static void GenerateTerrainMesh(ref MeshData meshdata, float[,] heightMap, MeshGeneratorOptions meshGeneratorOptions)
+    public static void GenerateTerrainMesh(ref MeshData meshData, float[,] heightMap, MeshGeneratorOptions meshGeneratorOptions)
     {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
@@ -15,7 +15,7 @@ public static class MeshGenerator
         int meshSimplificationIncrement = (meshGeneratorOptions.levelOfDetail == 0) ? 1 : meshGeneratorOptions.levelOfDetail * 2;
         int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
 
-        MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
+        meshData = new MeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
 
         for (int y = 0; y < height; y += meshSimplificationIncrement)
