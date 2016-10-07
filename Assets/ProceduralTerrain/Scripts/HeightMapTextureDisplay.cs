@@ -8,7 +8,7 @@ public class HeightMapTextureDisplay : TextureMapDisplay
 {
     public override void DisplayTexture()
     {
-        if (LandscapeGenerator.Instance.noiseMap != null)
+        if (LandscapeGenerator.Instance.heightMap != null)
         {
             Debug.Log("Displaying height map");
             TextureGenerator.TextureFromHeightMap(ref textureMap, LandscapeGenerator.Instance.heightMap);

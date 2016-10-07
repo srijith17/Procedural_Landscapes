@@ -67,4 +67,20 @@ public static class TextureGenerator
         }
         return maxValue;
     }
+
+    public static void TextureFromRegionMap(ref Texture2D textureMap, RegionMapGenerator.RegionType[,] regionMap)
+    {
+        int width = regionMap.GetLength(0);
+        int height = regionMap.GetLength(1);
+
+        Color[] colourMap = new Color[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                colourMap[y*width + x] = RegionMapDisplay.GetDisplayColor(regionMap[x, y]);
+            }
+        }
+        TextureFromColourMap(ref textureMap, colourMap, width, height);
+    }
 }

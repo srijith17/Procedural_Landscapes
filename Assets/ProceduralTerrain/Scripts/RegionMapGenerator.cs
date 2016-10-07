@@ -23,7 +23,7 @@ public class RegionMapOptions
 public class RegionMapGenerator
 {
 
-    enum Terrain
+    public enum RegionType
     {
         Unassigned = 0, 
         Water = 1,
@@ -31,10 +31,8 @@ public class RegionMapGenerator
 
     }
 
-    private int[,] terrainMap;
 
-
-    private static void CreateTerrain(ref int[,] regionMap, float[,] heightmap, RegionMapOptions RegionMapOptions)
+    private static void CreateTerrain(ref RegionType[,] regionMap, float[,] heightmap, RegionMapOptions RegionMapOptions)
     {
 
         ///Find good locations for water boies and assign them in the map
@@ -53,7 +51,7 @@ public class RegionMapGenerator
         //AssignLandscapeType();
     }
 
-    private static void FindWaterBodies(ref int[,] regionMap, float[,] heightmap, WaterBodyOptions waterBodyFinderOptions)
+    private static void FindWaterBodies(ref RegionType[,] regionMap, float[,] heightmap, WaterBodyOptions waterBodyFinderOptions)
     {
         int randomeSamples = waterBodyFinderOptions.maximumRandomSearches;
         for (int i = 0; i < randomeSamples; i++)
@@ -61,40 +59,53 @@ public class RegionMapGenerator
             Vector2 searchStartPoint = new Vector2(0, 0);
             Vector2 localMinima = new Vector2(0, 0);
             SampleRandomPoint(ref searchStartPoint, heightmap.GetLength(0), heightmap.GetLength(1));
-            GradientDescentToLocalMinima(ref localMinima, searchStartPoint, heightmap);
-            Debug.Log("local minima no "+ i + ":\t" + localMinima);
+            if (GradientDescentToLocalMinima(ref localMinima, searchStartPoint, heightmap))
+            {
+                Debug.Log("local minima no " + i + ":\t" + localMinima + "=" + heightmap[(int)localMinima.x, (int)localMinima.y]);
+            }
         }
     }
 
+    private const int maxIteration = 50;
+
+    //todo: unit test this function
     private static bool GradientDescentToLocalMinima(ref Vector2 localMinima, Vector2 searchPoint, float[,] heightmap)
     {
         Vector2[] steps = new Vector2[8] {new Vector2(-1, -1), new Vector2(-1, 0), new Vector2(-1, 1), new Vector2( 0, -1), new Vector2( 0, 1), new Vector2( 1, -1), new Vector2( 1, 0), new Vector2( 1, 1)};
         float[] gradients = new float[8];
-            
-        for (int i = 0; i < steps.Length; i++)
-        {
-            Vector2 comparePoint = searchPoint + steps[i];
-            if (comparePoint.x == 0 || comparePoint.y == 0 || comparePoint.x == heightmap.GetLength(0) ||
-                comparePoint.y == heightmap.GetLength(1))
-            {
-                gradients[i] = 0;
-            }
-            else
-            {
-                gradients[i] = heightmap[(int)comparePoint.x, (int)comparePoint.y] -
-                                 heightmap[(int)searchPoint.x, (int)searchPoint.y];
-            }
-        }
 
-        int minIndex = Array.IndexOf(gradients, gradients.Min());
-        if (gradients[minIndex] > 0)
+        int iteration = 0;
+        while (maxIteration > iteration++ )
         {
-            localMinima = searchPoint;
-            return true;
-        }
+            for (int i = 0; i < steps.Length; i++)
+            {
+                Vector2 comparePoint = searchPoint + steps[i];
+                if (comparePoint.x <= 0 || comparePoint.y <= 0 || comparePoint.x > heightmap.GetLength(0) - 1 || comparePoint.y > heightmap.GetLength(1) - 1)
+                {
+                    gradients[i] = float.MaxValue;
+                }
+                else
+                {
+                    gradients[i] = heightmap[(int)comparePoint.x, (int)comparePoint.y] -
+                                     heightmap[(int)searchPoint.x, (int)searchPoint.y];
+                    //Debug.Log("searchPoint: " + heightmap[(int)comparePoint.x, (int)comparePoint.y] + "comparePoint: " + heightmap[(int)searchPoint.x, (int)searchPoint.y] + "\tgradients[i] = " + gradients[i]);
+                }
+            }
 
-        Vector2 newSearchPoint = searchPoint - steps[minIndex];
-        return GradientDescentToLocalMinima(ref localMinima, newSearchPoint, heightmap);
+            int minIndex = Array.IndexOf(gradients, gradients.Min());
+            Vector2 minPoint = searchPoint + steps[minIndex];
+            //        Debug.Log("\theightMap[minIndex]: " + heightmap[(int)searchPoint.x, (int)searchPoint.y]);
+            //        Debug.Log("minIndex: " + minIndex + "\theightMap[minIndex]: " + heightmap[(int)minPoint.x, (int)minPoint.y]);
+            if (heightmap[(int)searchPoint.x, (int)searchPoint.y] <= heightmap[(int)minPoint.x, (int)minPoint.y])
+            {
+                localMinima = searchPoint;
+                return true;
+            }
+            //return false;
+            searchPoint = searchPoint - steps[minIndex];
+
+        }
+        return false;
     }
 
 
@@ -110,7 +121,7 @@ public class RegionMapGenerator
     //    Array.Clear(_terrainMap, 0, _terrainMap.Length);         //probably not needed
     //}
 
-    public static void Generate(ref int[,] regions, float[,] heightmap, RegionMapOptions regionMapOptions)
+    public static void Generate(ref RegionType[,] regions, float[,] heightmap, RegionMapOptions regionMapOptions)
     {
         CreateTerrain(ref regions, heightmap, regionMapOptions);
     }

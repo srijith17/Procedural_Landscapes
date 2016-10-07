@@ -17,7 +17,7 @@ public class LandscapeGenerator : Singleton<LandscapeGenerator>
 
     public float[,] noiseMap;
     public float[,] heightMap;
-    public int[,] regionMap;
+    public RegionMapGenerator.RegionType[,] regionMap;
     public bool autoUpdate;
 
     public int mapRows = 256;
@@ -43,12 +43,11 @@ public class LandscapeGenerator : Singleton<LandscapeGenerator>
         HeightMapGenerator.Generate(ref heightMap, noiseMap, heightMapOptions);
 
 
-        //if (regionMap == null)
-        //{
-        //    regionMap = new int[mapRows, mapColumns];
-        //}
-        //RegionMapGenerator.Generate(ref regionMap, heightMap, regionMapOptions);
-        //        RegionGenerator.createHeightMap();
+        if (regionMap == null)
+        {
+            regionMap = new RegionMapGenerator.RegionType[mapRows, mapColumns];
+        }
+        RegionMapGenerator.Generate(ref regionMap, heightMap, regionMapOptions);
 
     }
 
