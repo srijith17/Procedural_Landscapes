@@ -16,7 +16,7 @@ public class HeightMapGenerator : MonoBehaviour
     public enum DrawMode { NoiseMap, ColourMap, Mesh };
     public DrawMode drawMode;
 
-    const int mapChunkSize = 250;
+    public const int mapChunkSize = 250;
     public float noiseScale;
 
     public int octaves;
